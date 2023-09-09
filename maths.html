@@ -110,6 +110,7 @@
                 <input type="text" id="answer" size="5" width="7" autofocus class="form-control input-lg" title="Type your answer here and press the Enter key on your keyboard">
                 <span class="pull-right">
                     <button type="button" id="start" class="btn btn-success btn-lg">Start</button>
+					<button type="button" id="submit" class="btn btn-success btn-lg">Submit</button>
                     <button type="button" id="stop" class="btn btn-danger btn-lg" disabled>Stop</button>
                 </span>
             </p>
@@ -365,6 +366,15 @@
 
     quiz.hideImage();
     jQuery('#start').click(quiz.start);
+	jQuery('#submit').click((event)=>{
+		// enter key lets us check the answer
+		var value = jQuery('#answer').val();
+		if (value != '') {
+			quiz.checkAnswer(parseInt(value));
+		}
+		jQuery('#answer').val('');
+		event.preventDefault();
+	});
     jQuery('#stop').click(quiz.stop);
     jQuery('#left_range').change( setLeftRange );
     jQuery('#operator_type').change( setOperator );
