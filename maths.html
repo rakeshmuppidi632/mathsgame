@@ -13,11 +13,13 @@
         body {
             background-color: #f0f0f0;
         }
+        
         .bordered {
             background-color: white;
             border: 1px solid #ddd;
             padding: 20px;
             border-radius: 5px;
+            margin-top: 10px;
         }
         .answers-box {
             margin-top: 20px;
@@ -40,6 +42,38 @@
             color: #d9534f;
             background-color: #FFD2CE;
         }
+
+
+
+        @media (max-width: 1200px) {
+            label{
+                width: 30%;
+            }   
+            select{
+                width: 30%;
+            }
+            .button-container {
+                display: block;
+                margin-top: 10px;
+            }
+
+            div#completed_image {
+                position: fixed;
+                top: 0;
+                height: 100vh;
+                background-color: #999;
+                margin-top: 0;
+                width: 100vw;
+            }
+
+            div#close {
+                right: 24px;
+                position: absolute;
+                top: 18px;
+                font-size: 20px;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -47,36 +81,33 @@
     <h1>Maths Game</h1>
     <form class="form-inline" role="form">
         <p>
-            <label for="minutes">Minutes</label>
-            <select id="minutes" name="minutes">
-                <option>2</option>
-                <option selected>3</option>
-                <option>5</option>
-            </select>
-            <label for="questions">Questions</label>
+            <div class="lineone">
+                <label for="minutes">Minutes</label>
+                <select id="minutes" name="minutes">
+                    <option>2</option>
+                    <option selected>3</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <div class="linetwo">
+                <label for="questions">Questions</label>
             <select id="questions" name="questions">
-                <option>10</option>
+                <option selected>10</option>
+				<option>20</option>
+				<option>30</option>
+				<option>40</option>
                 <option>50</option>
-                <option selected>100</option>
                 <option>200</option>
             </select>
-            <label for="left_range">Difficulty</label>
+            </div>
+            <div class="linethree">
+            <label for="left_range">Difficulty</label></br>
             <select id="left_range" name="left_range">
-                <option value="1">0 to 1</option>
-                <option value="2">0 to 2</option>
-                <option value="3">0 to 3</option>
-                <option value="4">0 to 4</option>
-                <option value="5" selected>0 to 5</option>
-                <option value="6">0 to 6</option>
-                <option value="7">0 to 7</option>
-                <option value="8">0 to 8</option>
-                <option value="9">0 to 9</option>
-                <option value="10">0 to 10</option>
-                <option value="11">0 to 11</option>
-                <option value="12">0 to 12</option>
-                <option value="20">0 to 20</option>
-                <option value="50">0 to 50</option>
-                <option value="100">0 to 100</option>
+                <option value="5" selected>1 to 5</option>
+                <option value="10">1 to 10</option>
+                <option value="20">10 to 20</option>
+                <option value="50">1 to 50</option>
+				<option value="80">30 to 80</option>
             </select>
             <select id="operator_type" name="operator_type">
                 <option selected>+</option>
@@ -85,30 +116,25 @@
                 <option>&#247;</option>
             </select>
             <select id="right_range" name="right_range">
-                <option value="1">0 to 1</option>
-                <option value="2">0 to 2</option>
-                <option value="3">0 to 3</option>
-                <option value="4">0 to 4</option>
-                <option value="5" selected>0 to 5</option>
-                <option value="6">0 to 6</option>
-                <option value="7">0 to 7</option>
-                <option value="8">0 to 8</option>
-                <option value="9">0 to 9</option>
-                <option value="10">0 to 10</option>
-                <option value="11">0 to 11</option>
-                <option value="12">0 to 12</option>
-                <option value="20">0 to 20</option>
-                <option value="50">0 to 50</option>
-                <option value="100">0 to 100</option>
+                <option value="5" selected>1 to 5</option>
+                <option value="10">1 to 10</option>
+                <option value="20">10 to 20</option>
+                <option value="50">1 to 50</option>
+				<option value="80">30 to 80</option>
             </select>
-        </p>
+            </div>
+            <div class="linefour">
+            <label for="ten">Only Ten</label>
+            <input type="checkbox" id="forten" name="ten"/>
+        </div>
+    </p>
         <div class="bordered">
             <p class="text-center clearfix lead">
                 <label for="answer"><span id="left">99</span>
                 <span id="operator_value">+</span>
                 <span id="right">99</span> = </label>
                 <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="answer" size="5" width="7" autofocus class="form-control input-lg" title="Type your answer here and press the Enter key on your keyboard">
-                <span class="pull-right">
+                <span class="button-container">
                     <button type="button" id="start" class="btn btn-success btn-lg">Start</button>
 					<button type="button" id="submit" class="btn btn-success btn-lg">Submit</button>
                     <button type="button" id="stop" class="btn btn-danger btn-lg" disabled>Stop</button>
@@ -144,7 +170,7 @@
     <div class="bordered clearfix" id="answers">
     </div>
 </div>
-<div class="container-fluid answers-box" id="completed_image">
+<div class="container-fluid answers-box" id="completed_image" class="hidden" >
 </div>
 <!-- /.container -->
 
@@ -160,15 +186,35 @@
         questionsCorrect: 0,
         questionsAllowed: 0,
         leftRange: 10,
+        leftRangeMin: 10,
+        leftRangeMax: 10,
         rightRange: 10,
+        rightRangeMin: 10,
+        rightRangeMax: 10,
         operator: '+',
 
         getLeftRange: function() {
             return parseInt(jQuery("#left_range option:selected").val());
         },
 
+        getLeftRangeMin: function() {
+            return parseInt(jQuery("#left_range option:selected").text().split(" to ")[0]);
+        },
+
+        getLeftRangeMax: function() {
+            return parseInt(jQuery("#left_range option:selected").text().split(" to ")[1]);
+        },
+
         getRightRange: function() {
             return parseInt(jQuery("#right_range option:selected").val());
+        },
+
+        getRightRangeMin: function() {
+            return parseInt(jQuery("#right_range option:selected").text().split(" to ")[0]);
+        },
+
+        getRightRangeMax: function() {
+            return parseInt(jQuery("#right_range option:selected").text().split(" to ")[1]);
         },
 
         getOperator: function() {
@@ -185,6 +231,10 @@
             quiz.questionsAllowed = parseInt(jQuery("#questions option:selected").val());
             quiz.leftRange = quiz.getLeftRange();
             quiz.rightRange = quiz.getRightRange();
+            quiz.leftRangeMin = quiz.getLeftRangeMin();
+            quiz.rightRangeMin = quiz.getRightRangeMin();
+            quiz.leftRangeMax = quiz.getLeftRangeMax();
+            quiz.rightRangeMax = quiz.getRightRangeMax();
             quiz.operator = quiz.getOperator();
             quiz.secondsRemaining = quiz.secondsAllowed + 1;
             quiz.questionsCorrect = 0;
@@ -269,11 +319,17 @@
                 return;
             }
             quiz.questionsAsked++;
-            var left = Math.floor(Math.random() * (quiz.leftRange + 1));
-            var right = Math.floor(Math.random() * (quiz.rightRange + 1));
+
+            
+
+            var left = Math.floor(Math.random() * (quiz.leftRangeMax - quiz.leftRangeMin + 1)) + quiz.leftRangeMin;
+            var right = Math.floor(Math.random() * (quiz.rightRangeMax - quiz.rightRangeMin + 1)) + quiz.rightRangeMin;
+            if(jQuery('#forten').is(':checked')){
+                right = 10;
+            }
             jQuery('#answer').focus();
-            jQuery('#right').text(left);
-            jQuery('#left').text(right);
+            jQuery('#right').text(right);
+            jQuery('#left').text(left);
             quiz.displayQuestionsAsked();
             quiz.displayQuestionsCorrect();
         },
@@ -339,11 +395,15 @@
 
         hideImage: function() {
             jQuery('#completed_image').html('');
+            $("#completed_image").addClass('hidden');
+
         },
 
         showImage: function() {
-            jQuery('#completed_image').html('<div class="bordered"><h1>Well done!</h1><p>Here is a random cat to brighten your day</p><img src="http://thecatapi.com/api/images/get?format=src&time=' + Date.now() + '" style="max-width:100%"></div>');
+            jQuery('#completed_image').html('<div class="bordered"><div id="close" onclick="quiz.hideImage()">X</div><h1>Well done!</h1><img src="http://thecatapi.com/api/images/get?format=src&time=' + Date.now() + '" style="max-width:100%"></div>');
+            $("#completed_image").removeClass('hidden');
         }
+
     };
 
     function setLeftRange() {
@@ -379,6 +439,7 @@
     jQuery('#left_range').change( setLeftRange );
     jQuery('#operator_type').change( setOperator );
     jQuery('#right_range').change( setRightRange );
+    jQuery('#forten').change( setRightRange );
     jQuery('#answer').keypress(quiz.keyPress);
 
     // set default values on startup
